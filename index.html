@@ -177,9 +177,10 @@
         <p class="lead">正史和訳（AI）における再現性と、漢文資料デジタル化のための手法公開</p>
 
         <div class="btn-row">
-            <a class="btn" href="../金史/和訳/index.html">金史・和訳（成果物）</a>
+            <a class="btn" href="../金史/和訳/index.html">金史・和訳（成果物・ローカル）</a>
+            <a class="btn" href="https://github.com/akiasahi2008-hue/shisho-gijutsu/tree/main/code/%E9%87%91%E5%8F%B2" rel="noopener noreferrer">GitHub 上のスクリプト（code/金史）</a>
         </div>
-        <p class="note">コードを GitHub 等に公開したら、リポジトリの URL をこのページの「公開の場所」に追記すると利用者に親切です。スクリプト本体は現状 <code>史書/金史</code> フォルダにあります。</p>
+        <p class="note">金史パイプラインの Python・プロンプト・手順書は、本サイト用リポジトリの <strong><a href="code/金史/">code/金史/</a></strong> に同梱しています（ローカル開発の <code>史書/金史</code> と同一内容のスナップショット）。API キーは環境変数 <code>DEEPSEEK_API_KEY</code> を使用してください。</p>
 
         <blockquote>
             「魚を与える（翻訳文を公開する）だけでなく、魚の釣り方を教える（手法を公開する）」ことで、個人の成果が<strong>漢文デジタル化の標準モデル</strong>へとつながります。
@@ -194,7 +195,7 @@
         </ul>
 
         <h2 id="jinshi">2. 金史プロジェクトで公開している構成（例）</h2>
-        <p>以下は <code>E:\マイドライブ\史書\金史</code> に置いてある主なファイルです。サイト公開時はこのフォルダごと、または選別して GitHub に載せる想定です。</p>
+        <p>開発時は <code>史書/金史</code> に置いてあり、<strong>同じファイル群のコピーを <a href="code/金史/">code/金史/</a></strong> に載せています。GitHub から入手する場合はリポジトリ内の該当フォルダを参照してください。</p>
 
         <table class="file-table">
             <thead>
@@ -280,13 +281,13 @@
         <h2 id="where">4. 公開の場所のアイデア</h2>
         <ul>
             <li><strong>本サイト内</strong>：この <code>技術解説/index.html</code> のように、ポータルから「技術的背景」へ導線を張る。</li>
-            <li><strong>GitHub</strong>：<code>金史</code> フォルダのスクリプトと <code>翻訳プロンプト2.txt</code>、<code>テキスト整備手順.md</code> をリポジトリ化し、ここからリンク。</li>
+            <li><strong>GitHub</strong>：<a href="https://github.com/akiasahi2008-hue/shisho-gijutsu" rel="noopener noreferrer">shisho-gijutsu</a> リポジトリに <code>code/金史/</code> を同梱済み。</li>
         </ul>
 
         <h2 id="license">5. 著作権・ライセンス（コード）</h2>
-        <p>スクリプトを第三者が改変・再利用しやすくするには、<strong>MIT License</strong> 等のオープンライセンスをリポジトリの <code>LICENSE</code> に明記するのが一般的です。次のような一文を README に添えます。</p>
+        <p>本リポジトリのルートに <strong><a href="https://github.com/akiasahi2008-hue/shisho-gijutsu/blob/main/LICENSE" rel="noopener noreferrer">LICENSE</a></strong>（MIT）を置いています。スクリプトの改変・再利用にご利用ください。</p>
         <blockquote>
-            本リポジトリの Python スクリプトは MIT License の下で提供します。翻訳テキスト本体の利用条件は、サイト上の「ご利用・引用について」に従ってください。
+            翻訳テキスト本体の利用条件は、公開サイトの「ご利用・引用について」に従ってください。
         </blockquote>
         <p class="note">翻訳文の著作・底本との関係は、公開サイトのフッター記載（中華書局版・維基文庫ベース等）と整合させてください。</p>
 
