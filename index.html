@@ -174,13 +174,14 @@
         </nav>
 
         <h1>本プロジェクトの技術的背景</h1>
-        <p class="lead">正史和訳（AI）における再現性と、漢文資料デジタル化のための手法公開</p>
+        <p class="lead">正史和訳（AI）の<strong>成果物</strong>に加え、再現に必要な<strong>スクリプト・プロンプト・手順</strong>を GitHub で公開しています。</p>
 
         <div class="btn-row">
-            <a class="btn" href="../金史/和訳/index.html">金史・和訳（成果物・ローカル）</a>
-            <a class="btn" href="https://github.com/akiasahi2008-hue/shisho-gijutsu/tree/main/code/%E9%87%91%E5%8F%B2" rel="noopener noreferrer">GitHub 上のスクリプト（code/金史）</a>
+            <a class="btn" href="../金史/和訳/index.html">金史・和訳（閲覧・ローカル）</a>
+            <a class="btn" href="https://github.com/akiasahi2008-hue/shisho-gijutsu" rel="noopener noreferrer">GitHub リポジトリ（README・LICENSE）</a>
+            <a class="btn" href="https://github.com/akiasahi2008-hue/shisho-gijutsu/tree/main/code/%E9%87%91%E5%8F%B2" rel="noopener noreferrer">code/金史（スクリプト一式）</a>
         </div>
-        <p class="note">金史パイプラインの Python・プロンプト・手順書は、本サイト用リポジトリの <strong><a href="code/金史/">code/金史/</a></strong> に同梱しています（ローカル開発の <code>史書/金史</code> と同一内容のスナップショット）。API キーは環境変数 <code>DEEPSEEK_API_KEY</code> を使用してください。</p>
+        <p class="note"><strong>公開の形：</strong>本ページはサイト用フォルダ <code>技術解説/</code> に置き、同じ内容のリポジトリ <a href="https://github.com/akiasahi2008-hue/shisho-gijutsu" rel="noopener noreferrer">akiasahi2008-hue/shisho-gijutsu</a> に <code>index.html</code>・<code>LICENSE</code>（MIT）・<strong><a href="code/金史/">code/金史/</a></strong> を載せています。<code>code/金史/</code> はローカル開発ディレクトリ <code>史書/金史</code> から取り込んだスナップショットであり、作業の本線は引き続きローカル側です。<strong>含めていないもの：</strong>原文・和訳の大量テキスト、生成 HTML、<code>URLリスト.txt</code> などのデータ類（リポジトリ容量と著作権のため）。実行時は <code>--base-dir</code> でご自身のプロジェクトルートを指定し、API キーは環境変数 <code>DEEPSEEK_API_KEY</code> のみを使用してください（コードに直書きしないこと）。</p>
 
         <blockquote>
             「魚を与える（翻訳文を公開する）だけでなく、魚の釣り方を教える（手法を公開する）」ことで、個人の成果が<strong>漢文デジタル化の標準モデル</strong>へとつながります。
@@ -194,8 +195,8 @@
             <li><strong>構造化データの普及</strong>：「漢文1行：和訳1行」のように機械可読な対訳は、NotebookLM 等への投入や検索・研究用途に効きます。</li>
         </ul>
 
-        <h2 id="jinshi">2. 金史プロジェクトで公開している構成（例）</h2>
-        <p>開発時は <code>史書/金史</code> に置いてあり、<strong>同じファイル群のコピーを <a href="code/金史/">code/金史/</a></strong> に載せています。GitHub から入手する場合はリポジトリ内の該当フォルダを参照してください。</p>
+        <h2 id="jinshi">2. 金史パイプラインのファイル構成</h2>
+        <p>次の表は、<strong>GitHub の <a href="https://github.com/akiasahi2008-hue/shisho-gijutsu/tree/main/code/%E9%87%91%E5%8F%B2" rel="noopener noreferrer"><code>code/金史/</code></a></strong>（およびローカルの <code>史書/金史</code>）に含まれる主なファイルです。入手・閲覧はリポジトリの該当パス、または手元にクローンしたフォルダから行ってください。入口の説明は <a href="https://github.com/akiasahi2008-hue/shisho-gijutsu/blob/main/code/%E9%87%91%E5%8F%B2/README.md" rel="noopener noreferrer"><code>code/金史/README.md</code></a> にまとめています。</p>
 
         <table class="file-table">
             <thead>
@@ -249,17 +250,18 @@
             </tbody>
         </table>
 
-        <h2 id="detail">3. 読者に喜ばれる公開セット（本プロジェクトとの対応）</h2>
+        <h2 id="detail">3. 本リポジトリで示している「公開セット」</h2>
+        <p>歴史資料のデジタル化や AI 和訳を他者が再現しやすくするために、次の三層をそろえています。</p>
 
-        <h3>① Python スクリプトの解説</h3>
+        <h3>① Python スクリプト（API・分割・再開）</h3>
         <ul>
             <li><strong>API 連携</strong>：<code>deepseek_translate.py</code> が HTTP で JSON を送受信。キーはコードに書かず環境変数のみ。</li>
             <li><strong>テキスト分割</strong>：<code>splitter.py</code> の行数・文字数上限が、長大な史書を安全にチャンクする主なノブです。行数不一致が続く場合は <code>workflow.py</code> の <code>--fast-stable</code>（小さめチャンクのプリセット）も利用可能です。</li>
             <li><strong>エラーハンドリング・レジューム</strong>：<code>progress.json</code> の <code>done_chunks</code> / <code>failed_chunks</code> と、既存の <code>translated/chunk_*.txt</code> を照合して続きから処理します。</li>
         </ul>
 
-        <h3>② プロンプト（設定ファイル）の公開</h3>
-        <p><code>翻訳プロンプト2.txt</code> では次のような方針を明示しています（抜粋）。</p>
+        <h3>② プロンプト（<code>翻訳プロンプト2.txt</code>）</h3>
+        <p>リポジトリ内の同名ファイルでは、次のような方針を明示しています（抜粋）。</p>
         <pre class="code">あなたは中国正史『金史』（元・脱脱等撰）の漢文を、学術的な日本語に翻訳する専門家です。
 
 【基本方針】
@@ -274,26 +276,26 @@
         <ol>
             <li>ウィキソース等から原文テキストを用意する（<code>regen_url_list.py</code> → fetch 系スクリプト）。</li>
             <li><code>strip_wiki_templates.py</code> 等でテキストを整備（<code>テキスト整備手順.md</code>）。</li>
-            <li><code>workflow.py</code> で分割・翻訳・結合し、<code>和訳/巻*.txt</code> を生成。</li>
-            <li>HTML 変換スクリプトで公開用ページを出力し、ポータル（<code>史書.html</code>）からリンク。</li>
+            <li><code>workflow.py</code> で分割・翻訳・結合し、ローカルで <code>和訳/巻*.txt</code> を生成。</li>
+            <li><code>和訳/convert_kyutango_to_premium_html.py</code> 等で公開用 HTML を出力し、ポータル（<code>史書.html</code>）から成果物へリンク。</li>
         </ol>
 
-        <h2 id="where">4. 公開の場所のアイデア</h2>
+        <h2 id="where">4. 公開している場所の役割</h2>
         <ul>
-            <li><strong>本サイト内</strong>：この <code>技術解説/index.html</code> のように、ポータルから「技術的背景」へ導線を張る。</li>
-            <li><strong>GitHub</strong>：<a href="https://github.com/akiasahi2008-hue/shisho-gijutsu" rel="noopener noreferrer">shisho-gijutsu</a> リポジトリに <code>code/金史/</code> を同梱済み。</li>
+            <li><strong>本サイト（ポータル）</strong>：和訳 HTML の閲覧が主目的です。<code>史書.html</code> から本ページ（<code>技術解説/index.html</code>）へ導線を張り、閲覧者が手法の概要と GitHub へ辿れるようにしています。</li>
+            <li><strong>GitHub（<a href="https://github.com/akiasahi2008-hue/shisho-gijutsu" rel="noopener noreferrer">shisho-gijutsu</a>）</strong>：スクリプト・プロンプト・手順書の取得、Issue やフォークによる改善の受け皿として使えます。コードのライセンスはリポジトリ直下の MIT です。</li>
         </ul>
 
-        <h2 id="license">5. 著作権・ライセンス（コード）</h2>
-        <p>本リポジトリのルートに <strong><a href="https://github.com/akiasahi2008-hue/shisho-gijutsu/blob/main/LICENSE" rel="noopener noreferrer">LICENSE</a></strong>（MIT）を置いています。スクリプトの改変・再利用にご利用ください。</p>
+        <h2 id="license">5. 著作権・ライセンス</h2>
+        <p><strong>スクリプト類</strong>はリポジトリルートの <strong><a href="https://github.com/akiasahi2008-hue/shisho-gijutsu/blob/main/LICENSE" rel="noopener noreferrer">LICENSE</a></strong>（MIT）に従います。改変・再利用・再配布の条件は同ファイルを参照してください。</p>
         <blockquote>
-            翻訳テキスト本体の利用条件は、公開サイトの「ご利用・引用について」に従ってください。
+            <strong>翻訳テキスト（和訳本文）</strong>の利用・引用については、公開サイトの「ご利用・引用について」およびフッターの案内に従ってください。底本（中華書局版・維基文庫等）との関係もそこで示しています。
         </blockquote>
-        <p class="note">翻訳文の著作・底本との関係は、公開サイトのフッター記載（中華書局版・維基文庫ベース等）と整合させてください。</p>
+        <p class="note">ローカル <code>史書/金史</code> のスクリプトを更新したときは、必要に応じて <code>技術解説/code/金史/</code> を差し替え、リポジトリへコミット・プッシュし、本ページの説明と齟齬がないか確認するとよいです。</p>
 
         <footer class="page-foot">
             <p>正史和訳プロジェクト — 技術解説ページ</p>
-            <p>内容は金史フォルダの実装に基づき 2026 年時点で整理しました。スクリプトの更新に合わせ、随時このページも改訂してください。</p>
+            <p>2026 年時点の内容です。GitHub 側のファイル更新に合わせ、本ページも適宜見直してください。</p>
         </footer>
     </article>
 </body>
