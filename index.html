@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技術解説 — 正史和訳プロジェクト（手法の公開）</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --outer-bg: #c0a154;
+            --inner-bg: #fdfcf0;
+            --accent-color: #8b6e30;
+            --text-main: #2c2c2c;
+            --text-sub: #555555;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--outer-bg);
+            background-image: url('https://www.transparenttextures.com/patterns/papyrus-dark.png');
+            color: var(--text-main);
+            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+            line-height: 1.85;
+            min-height: 100vh;
+            padding: 36px 18px 60px;
+        }
+        .wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--inner-bg);
+            padding: 38px 34px 48px;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(189, 168, 120, 0.5);
+            position: relative;
+        }
+        .wrap::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 10px;
+            background: linear-gradient(90deg, var(--accent-color), var(--outer-bg), var(--accent-color));
+            border-radius: 8px 8px 0 0;
+        }
+        nav.breadcrumb {
+            font-size: 0.9rem;
+            margin-bottom: 22px;
+            color: var(--text-sub);
+        }
+        nav.breadcrumb a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        nav.breadcrumb a:hover { text-decoration: underline; }
+        h1 {
+            font-size: 1.75rem;
+            letter-spacing: 0.12em;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #111;
+        }
+        .lead {
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 0.98rem;
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+        h2 {
+            font-size: 1.28rem;
+            margin: 36px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(192, 161, 84, 0.45);
+            color: #1a1a1a;
+        }
+        h3 {
+            font-size: 1.08rem;
+            margin: 22px 0 10px;
+            color: var(--accent-color);
+        }
+        p, li { margin-bottom: 0.65em; }
+        ul, ol { margin: 10px 0 14px 1.35em; }
+        blockquote {
+            margin: 20px 0;
+            padding: 16px 22px;
+            background: #fcfaf4;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0 8px 8px 0;
+            color: var(--text-main);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        blockquote cite {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            font-style: normal;
+        }
+        .file-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            margin: 14px 0;
+        }
+        .file-table th, .file-table td {
+            border: 1px solid #e0d8c0;
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .file-table th {
+            background: rgba(192, 161, 84, 0.15);
+            font-weight: 700;
+        }
+        .file-table code { font-family: ui-monospace, monospace; font-size: 0.88em; }
+        pre.code {
+            background: #2b2b2b;
+            color: #e8e8e8;
+            padding: 14px 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            margin: 12px 0;
+        }
+        .note {
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            background: rgba(0,0,0,0.03);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 14px 0;
+            border: 1px solid rgba(139, 110, 48, 0.12);
+        }
+        footer.page-foot {
+            margin-top: 40px;
+            padding-top: 22px;
+            border-top: 1px solid #e0d8c0;
+            font-size: 0.88rem;
+            color: #666;
+        }
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 24px 0 8px;
+        }
+        a.btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #fff;
+            border: 1px solid #dcd3b6;
+            border-radius: 20px;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+        a.btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <article class="wrap">
+        <nav class="breadcrumb" aria-label="パンくず">
+            <a href="../史書.html">史書ポータル</a>
+            &nbsp;›&nbsp;技術解説
+        </nav>
+
+        <h1>本プロジェクトの技術的背景</h1>
+        <p class="lead">正史和訳（AI）における再現性と、漢文資料デジタル化のための手法公開</p>
+
+        <div class="btn-row">
+            <a class="btn" href="../金史/和訳/index.html">金史・和訳（成果物）</a>
+        </div>
+        <p class="note">コードを GitHub 等に公開したら、リポジトリの URL をこのページの「公開の場所」に追記すると利用者に親切です。スクリプト本体は現状 <code>史書/金史</code> フォルダにあります。</p>
+
+        <blockquote>
+            「魚を与える（翻訳文を公開する）だけでなく、魚の釣り方を教える（手法を公開する）」ことで、個人の成果が<strong>漢文デジタル化の標準モデル</strong>へとつながります。
+            <cite>— 本ページの構成方針</cite>
+        </blockquote>
+
+        <h2 id="why">1. なぜ「手法」の公開に価値があるのか</h2>
+        <ul>
+            <li><strong>再現性</strong>：『春秋』『資治通鑑』、地方志など、未処理の漢文史料は膨大です。プロンプト・分割・API 設定が分かれば、他の有志が同じ型で別史書に挑戦しやすくなります。</li>
+            <li><strong>AI翻訳の信頼性の検証</strong>：どの指示・温度・チャンクサイズで訳したかが明示されていれば、読者は精度を文脈に沿って判断できます。</li>
+            <li><strong>構造化データの普及</strong>：「漢文1行：和訳1行」のように機械可読な対訳は、NotebookLM 等への投入や検索・研究用途に効きます。</li>
+        </ul>
+
+        <h2 id="jinshi">2. 金史プロジェクトで公開している構成（例）</h2>
+        <p>以下は <code>E:\マイドライブ\史書\金史</code> に置いてある主なファイルです。サイト公開時はこのフォルダごと、または選別して GitHub に載せる想定です。</p>
+
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>種別</th>
+                    <th>ファイル（例）</th>
+                    <th>役割</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>パイプライン</td>
+                    <td><code>workflow.py</code></td>
+                    <td>単巻の流れ：<strong>fetch → split → DeepSeek 翻訳 → merge</strong>。既定では <code>原文/巻*.txt</code> を読み、Wikisource 取得が必要なときだけ <code>--fetch</code>。</td>
+                </tr>
+                <tr>
+                    <td>API</td>
+                    <td><code>deepseek_translate.py</code></td>
+                    <td>DeepSeek Chat API（<code>https://api.deepseek.com/chat/completions</code>）呼び出し。<strong>環境変数 <code>DEEPSEEK_API_KEY</code></strong> を使用。進捗は各巻フォルダの <code>progress.json</code> で管理し、中断後の再開に利用。</td>
+                </tr>
+                <tr>
+                    <td>分割</td>
+                    <td><code>splitter.py</code></td>
+                    <td>トークン・行数制限対策として、<code>--max-lines</code>（既定 15）と <code>--max-chars</code>（既定 1900）でチャンク化。</td>
+                </tr>
+                <tr>
+                    <td>取得・整備</td>
+                    <td><code>wikisource_fetch.py</code>、<code>bulk_preflight_fetch.py</code>、<code>cleanup_raw_pipeline.py</code></td>
+                    <td>ウィキソース由来テキストの取得と前処理。</td>
+                </tr>
+                <tr>
+                    <td>ウィキ整形</td>
+                    <td><code>strip_wiki_templates.py</code>、<code>remove_toc_lines.py</code>、<code>remove_wiki_html_artifacts.py</code></td>
+                    <td>MediaWiki テンプレや <code>__TOC__</code> 等の除去。手順は <code>テキスト整備手順.md</code> に記載。</td>
+                </tr>
+                <tr>
+                    <td>URL 一覧</td>
+                    <td><code>regen_url_list.py</code></td>
+                    <td>zh.wikisource の索引から巻ページ URL を収集し <code>URLリスト.txt</code> を生成。</td>
+                </tr>
+                <tr>
+                    <td>プロンプト</td>
+                    <td><code>翻訳プロンプト2.txt</code></td>
+                    <td><code>workflow.py</code> の <code>--prompt-file</code> 既定で参照。役割・文体・1行対1行・固有名詞の扱いを記述。</td>
+                </tr>
+                <tr>
+                    <td>HTML 化</td>
+                    <td><code>和訳/convert_kyutango_to_premium_html.py</code> ほか</td>
+                    <td>和訳テキストから閲覧用 HTML への変換（指示は <code>和訳/史書HTML変換指示書.md</code>）。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="detail">3. 読者に喜ばれる公開セット（本プロジェクトとの対応）</h2>
+
+        <h3>① Python スクリプトの解説</h3>
+        <ul>
+            <li><strong>API 連携</strong>：<code>deepseek_translate.py</code> が HTTP で JSON を送受信。キーはコードに書かず環境変数のみ。</li>
+            <li><strong>テキスト分割</strong>：<code>splitter.py</code> の行数・文字数上限が、長大な史書を安全にチャンクする主なノブです。行数不一致が続く場合は <code>workflow.py</code> の <code>--fast-stable</code>（小さめチャンクのプリセット）も利用可能です。</li>
+            <li><strong>エラーハンドリング・レジューム</strong>：<code>progress.json</code> の <code>done_chunks</code> / <code>failed_chunks</code> と、既存の <code>translated/chunk_*.txt</code> を照合して続きから処理します。</li>
+        </ul>
+
+        <h3>② プロンプト（設定ファイル）の公開</h3>
+        <p><code>翻訳プロンプト2.txt</code> では次のような方針を明示しています（抜粋）。</p>
+        <pre class="code">あなたは中国正史『金史』（元・脱脱等撰）の漢文を、学術的な日本語に翻訳する専門家です。
+
+【基本方針】
+・文体は現代日本語の文語調（である調）。過度な口語・俗語は避ける。
+・原文の行構造を保つ：1行の入力に対し、和訳も原則1行（…）
+
+【固有名詞・時代】
+・人名・王朝名・地名・官職名は、一般的な日本史学・漢籍慣例に従う（…）</pre>
+        <p class="note">公開用に API キーや個人パスを含むコマンド例は載せず、<code>DEEPSEEK_API_KEY</code> は各自の環境変数で設定してください。</p>
+
+        <h3>③ ワークフロー（手順の全体像）</h3>
+        <ol>
+            <li>ウィキソース等から原文テキストを用意する（<code>regen_url_list.py</code> → fetch 系スクリプト）。</li>
+            <li><code>strip_wiki_templates.py</code> 等でテキストを整備（<code>テキスト整備手順.md</code>）。</li>
+            <li><code>workflow.py</code> で分割・翻訳・結合し、<code>和訳/巻*.txt</code> を生成。</li>
+            <li>HTML 変換スクリプトで公開用ページを出力し、ポータル（<code>史書.html</code>）からリンク。</li>
+        </ol>
+
+        <h2 id="where">4. 公開の場所のアイデア</h2>
+        <ul>
+            <li><strong>本サイト内</strong>：この <code>技術解説/index.html</code> のように、ポータルから「技術的背景」へ導線を張る。</li>
+            <li><strong>GitHub</strong>：<code>金史</code> フォルダのスクリプトと <code>翻訳プロンプト2.txt</code>、<code>テキスト整備手順.md</code> をリポジトリ化し、ここからリンク。</li>
+        </ul>
+
+        <h2 id="license">5. 著作権・ライセンス（コード）</h2>
+        <p>スクリプトを第三者が改変・再利用しやすくするには、<strong>MIT License</strong> 等のオープンライセンスをリポジトリの <code>LICENSE</code> に明記するのが一般的です。次のような一文を README に添えます。</p>
+        <blockquote>
+            本リポジトリの Python スクリプトは MIT License の下で提供します。翻訳テキスト本体の利用条件は、サイト上の「ご利用・引用について」に従ってください。
+        </blockquote>
+        <p class="note">翻訳文の著作・底本との関係は、公開サイトのフッター記載（中華書局版・維基文庫ベース等）と整合させてください。</p>
+
+        <footer class="page-foot">
+            <p>正史和訳プロジェクト — 技術解説ページ</p>
+            <p>内容は金史フォルダの実装に基づき 2026 年時点で整理しました。スクリプトの更新に合わせ、随時このページも改訂してください。</p>
+        </footer>
+    </article>
+</body>
+</html>
