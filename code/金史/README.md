@@ -19,13 +19,20 @@ python workflow.py 1 --base-dir D:\作業\金史
 
 | ファイル | 説明 |
 |----------|------|
+| `run_translate.bat` | **Windows 向け**。対話形式で単巻（`workflow.py`）または範囲（`run_range.py`）を実行。バッチと同じフォルダを `--base-dir` に指定。Wikisource 取得は含まない（先に `原文/` を用意するか別途 fetch）。 |
 | `workflow.py` | fetch → split → 翻訳 → merge の一連処理 |
 | `splitter.py` | 原文のチャンク分割 |
 | `deepseek_translate.py` | DeepSeek API 呼び出し・進捗 `progress.json` |
-| `wikisource_fetch.py` | Wikisource からの原文取得 |
+| `wikisource_fetch.py` | Wikisource からの原文取得（`--reject-if-table` で表マークアップ巻を保存拒否可） |
+| `bulk_preflight_fetch.py` | URL リストに従い一括取得。表マークアップ検出巻は除外し `URLリスト.txt` を更新 |
+| `purge_volumes_with_tables.py` | 既存 `原文/` 内の表マークアップ巻を削除・リストから除外 |
 | `strip_wiki_templates.py` など | ウィキマークアップの除去（詳細は `テキスト整備手順.md`） |
 | `翻訳プロンプト2.txt` | 翻訳指示プロンプト |
 | `和訳/convert_kyutango_to_premium_html.py` | 和訳テキストから HTML への変換（`史書HTML変換指示書.md` 参照） |
+
+## 「表」の除外について
+
+正史の **「表」という部類の巻**をタイトルだけで弾いているのではありません。**Wikitext に表構文が含まれるか**（`{|`、HTML `<table`、`{{table` など）を `wikisource_fetch.wikitext_has_table_markup` で判定し、該当巻は取得対象外にする設計です。詳しくは同一リポジトリ直下の `index.html`（技術解説ページ）の「表マークアップ」節を参照してください。
 
 ## データフォルダ
 

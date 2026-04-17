@@ -3,7 +3,7 @@
 本リポジトリは、サイト内ページ「本プロジェクトの技術的背景」の公開用です。
 
 - **解説ページ**: [index.html](index.html)（ローカルまたは GitHub Pages で閲覧）
-- **スクリプト一式（金史）**: [code/金史/](code/金史/) — AI 和訳パイプラインの Python・プロンプト・手順書。詳細は [code/金史/README.md](code/金史/README.md)
+- **スクリプト一式（金史）**: [code/金史/](code/金史/) — AI 和訳パイプラインの Python・プロンプト・手順書。Windows では [code/金史/run_translate.bat](code/金史/run_translate.bat) から単巻・範囲実行できます。詳細は [code/金史/README.md](code/金史/README.md)
 - 史書ポータルや金史の和訳 HTML 本文は、サイト用ディレクトリで別管理しています（本リポジトリには含めていません）。
 
 ## ライセンス

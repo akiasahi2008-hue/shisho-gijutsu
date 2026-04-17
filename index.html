@@ -184,15 +184,15 @@
         <p class="note"><strong>公開の形：</strong>本ページはサイト用フォルダ <code>技術解説/</code> に置き、同じ内容のリポジトリ <a href="https://github.com/akiasahi2008-hue/shisho-gijutsu" rel="noopener noreferrer">akiasahi2008-hue/shisho-gijutsu</a> に <code>index.html</code>・<code>LICENSE</code>（MIT）・<strong><a href="code/金史/">code/金史/</a></strong> を載せています。<code>code/金史/</code> はローカル開発ディレクトリ <code>史書/金史</code> から取り込んだスナップショットであり、作業の本線は引き続きローカル側です。<strong>含めていないもの：</strong>原文・和訳の大量テキスト、生成 HTML、<code>URLリスト.txt</code> などのデータ類（リポジトリ容量と著作権のため）。実行時は <code>--base-dir</code> でご自身のプロジェクトルートを指定し、API キーは環境変数 <code>DEEPSEEK_API_KEY</code> のみを使用してください（コードに直書きしないこと）。</p>
 
         <blockquote>
-            「魚を与える（翻訳文を公開する）だけでなく、魚の釣り方を教える（手法を公開する）」ことで、個人の成果が<strong>漢文デジタル化の標準モデル</strong>へとつながります。
-            <cite>— 本ページの構成方針</cite>
+            翻訳されたテキストを公開するだけでなく、その翻訳に至った手法やスクリプトを共有することは、漢文史料のデジタル化とAI翻訳の活用を広げるための重要なステップだと考えています。
+            <cite>— 本ページの公開方針</cite>
         </blockquote>
 
         <h2 id="why">1. なぜ「手法」の公開に価値があるのか</h2>
         <ul>
-            <li><strong>再現性</strong>：『春秋』『資治通鑑』、地方志など、未処理の漢文史料は膨大です。プロンプト・分割・API 設定が分かれば、他の有志が同じ型で別史書に挑戦しやすくなります。</li>
-            <li><strong>AI翻訳の信頼性の検証</strong>：どの指示・温度・チャンクサイズで訳したかが明示されていれば、読者は精度を文脈に沿って判断できます。</li>
-            <li><strong>構造化データの普及</strong>：「漢文1行：和訳1行」のように機械可読な対訳は、NotebookLM 等への投入や検索・研究用途に効きます。</li>
+            <li><strong>再現性</strong>：『春秋』『資治通鑑』、地方志など、未処理の漢文史料は膨大です。プロンプト・分割・API 設定が分かれば、他の有志が同じ手法を用いて別の史書の翻訳に挑戦しやすくなります。</li>
+            <li><strong>AI翻訳の信頼性の検証</strong>：AIへの指示内容や翻訳処理の各種設定が明示されていれば、読者は翻訳の精度や妥当性を検証しやすくなります。</li>
+            <li><strong>構造化データの普及</strong>：「漢文1行：和訳1行」のように構造化された対訳データは、NotebookLM等での活用をはじめ、検索や研究用途に大きく役立ちます。</li>
         </ul>
 
         <h2 id="jinshi">2. 金史パイプラインのファイル構成</h2>
@@ -213,9 +213,15 @@
                     <td>単巻の流れ：<strong>fetch → split → DeepSeek 翻訳 → merge</strong>。既定では <code>原文/巻*.txt</code> を読み、Wikisource 取得が必要なときだけ <code>--fetch</code>。</td>
                 </tr>
                 <tr>
+                    <td>Windows バッチ</td>
+                    <td><code>run_translate.bat</code></td>
+                    <td>ダブルクリックで対話実行。モード1は単巻（内部で <code>workflow.py</code>）、モード2は巻番号範囲（<code>run_range.py</code>）。バッチと同じフォルダを <code>--base-dir</code> に自動設定。<strong>このバッチ自体は Wikisource を取りに行かず</strong>、事前に <code>原文/</code> を用意するか、別途 <code>wikisource_fetch.py</code>／<code>workflow.py --fetch</code> を使ってください。</td>
+                </tr>
+                <tr>
                     <td>API</td>
                     <td><code>deepseek_translate.py</code></td>
-                    <td>DeepSeek Chat API（<code>https://api.deepseek.com/chat/completions</code>）呼び出し。<strong>環境変数 <code>DEEPSEEK_API_KEY</code></strong> を使用。進捗は各巻フォルダの <code>progress.json</code> で管理し、中断後の再開に利用。</td>
+                    <td>DeepSeek Chat API（<code>https://api.deepseek.com/chat/completions</code>）呼び出し。<strong>環境変数 <code>DEEPSEEK_API_KEY</code></strong> を使用。進捗は各巻フォルダの <code>progress.json</code> で管理し、中断後の再開に利用。<br>
+                    <span style="display:inline-block; margin-top:8px; padding:8px 10px; background:#fffcf5; border:1px solid #dcd3b6; border-radius:4px; font-size:0.88rem; line-height:1.5;"><strong>※</strong> DeepSeek APIは有料ですので、<a href="https://platform.deepseek.com/top_up" target="_blank" rel="noopener noreferrer" style="color:var(--accent-color); font-weight:bold;">ご購入ページ</a>から必要な分だけチャージ（Top up）してください。<br>目安としては「100巻の翻訳で1〜2ドルぐらい」です。</span></td>
                 </tr>
                 <tr>
                     <td>分割</td>
@@ -250,13 +256,17 @@
             </tbody>
         </table>
 
+        <h3 id="table-exclude">「表」巻と表マークアップ（除外の考え方）</h3>
+        <p>正史の<strong>志・表・列伝の「表」</strong>という区分だからといって、見出しだけで機械的に巻を除外しているわけではありません。パイプラインが扱いづらいと判断しているのは、Wikisource の wikitext に含まれる<strong>表マークアップ</strong>です。具体的には、MediaWiki の表構文（<code>{|</code> で始まる形式）、HTML の <code>&lt;table&gt;</code> タグ、<code>{{table</code> 系テンプレートなどが検出された巻は、<code>bulk_preflight_fetch.py</code>（一括取得時）や <code>purge_volumes_with_tables.py</code>（既存の <code>原文/</code> を検査）により、和訳対象から外し、<code>URLリスト.txt</code> からも除く実装になっています。検出関数は <code>wikisource_fetch.py</code> の <code>wikitext_has_table_markup</code> です。</p>
+        <p class="note">逆に、巻名が「表」でも本文がプレーンな行ベースのテキストに近い場合は、この判定に引っかからず処理対象になることがあります。単発取得では <code>wikisource_fetch.py</code> の <code>--reject-if-table</code> で保存を拒否することもできます。</p>
+
         <h2 id="detail">3. 本リポジトリで示している「公開セット」</h2>
         <p>歴史資料のデジタル化や AI 和訳を他者が再現しやすくするために、次の三層をそろえています。</p>
 
         <h3>① Python スクリプト（API・分割・再開）</h3>
         <ul>
             <li><strong>API 連携</strong>：<code>deepseek_translate.py</code> が HTTP で JSON を送受信。キーはコードに書かず環境変数のみ。</li>
-            <li><strong>テキスト分割</strong>：<code>splitter.py</code> の行数・文字数上限が、長大な史書を安全にチャンクする主なノブです。行数不一致が続く場合は <code>workflow.py</code> の <code>--fast-stable</code>（小さめチャンクのプリセット）も利用可能です。</li>
+            <li><strong>テキスト分割</strong>：<code>splitter.py</code> の行数・文字数上限が、長大な史書を安全に分割して処理するための主要な設定項目です。行数不一致が続く場合は <code>workflow.py</code> の <code>--fast-stable</code>（小さめサイズに分割するプリセット）も利用可能です。</li>
             <li><strong>エラーハンドリング・レジューム</strong>：<code>progress.json</code> の <code>done_chunks</code> / <code>failed_chunks</code> と、既存の <code>translated/chunk_*.txt</code> を照合して続きから処理します。</li>
         </ul>
 
@@ -274,8 +284,9 @@
 
         <h3>③ ワークフロー（手順の全体像）</h3>
         <ol>
-            <li>ウィキソース等から原文テキストを用意する（<code>regen_url_list.py</code> → fetch 系スクリプト）。</li>
+            <li>ウィキソース等から原文テキストを用意する（<code>regen_url_list.py</code> → fetch 系スクリプト）。表マークアップ検出で除外された巻は <code>表検出_除外巻.txt</code> 等に記録されます。</li>
             <li><code>strip_wiki_templates.py</code> 等でテキストを整備（<code>テキスト整備手順.md</code>）。</li>
+            <li><strong>Windows</strong>では <code>run_translate.bat</code> から <code>workflow.py</code>／<code>run_range.py</code> を叩くと、コマンドラインに不慣れでも単巻・範囲実行しやすくなります。</li>
             <li><code>workflow.py</code> で分割・翻訳・結合し、ローカルで <code>和訳/巻*.txt</code> を生成。</li>
             <li><code>和訳/convert_kyutango_to_premium_html.py</code> 等で公開用 HTML を出力し、ポータル（<code>史書.html</code>）から成果物へリンク。</li>
         </ol>
@@ -291,6 +302,14 @@
         <blockquote>
             <strong>翻訳テキスト（和訳本文）</strong>の利用・引用については、公開サイトの「ご利用・引用について」およびフッターの案内に従ってください。底本（中華書局版・維基文庫等）との関係もそこで示しています。
         </blockquote>
+
+        <h2 id="tips">6. 初心者の方へ（AIエディタの活用）</h2>
+        <p>スクリプトやPythonの詳しい仕組みがわからない方でも、<strong>Cursor</strong> などのAIコードエディタを活用すれば簡単に翻訳環境を構築できます。</p>
+        <p>公開しているファイル一式をローカルPCのプロジェクトフォルダにすべて保存し、Cursorでそのフォルダを開いてください。そして、CursorのAIチャットに対して以下のように指示を出します。</p>
+        <blockquote style="background: #fffcf5;">
+            「<code>https://zh.wikisource.org/wiki/%E9%87%91%E5%8F%B2</code> （※ 例として金史のURL）を翻訳したいので、このフォルダ内にあるコード類を私の環境に合わせて修正・調整してください」
+        </blockquote>
+        <p>このように指示すれば、あとはAIがコードの修正から翻訳開始に必要な準備までを自動的に案内し、環境を整えてくれます。</p>
 
         <footer class="page-foot">
             <p>正史和訳プロジェクト — 技術解説ページ</p>
